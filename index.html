@@ -1,156 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
     <meta charset="UTF-8">
-    <title>The Last Letter Geography Game Analysis</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css" rel="stylesheet">
-    <script type="text/javascript" charset="utf8"
-        src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Last Letter Game - Strategic Analysis</title>
+    <link href="style.css" rel="stylesheet">
 </head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌍 Last Letter Geography Game</h1>
+            <p class="tagline">Analyze patterns, plan your strategy, and dominate the game where every ending becomes a new beginning.</p>
+        </header>
 
-<body class="bg-light">
-    <div class="container py-5">
-        <div class="row text-center mb-4">
-            <h1 class="bg-primary text-white py-3 rounded">The Last Letter Geography Game Analysis</h1>
+        <div class="info-box">
+            <h3>📖 How to Play the Last Letter Game</h3>
+            <p><strong>The Rules:</strong> Players take turns naming geographical places (cities, countries, continents, etc.) where each new place must start with the <strong>last letter</strong> of the previous place.</p>
+<p><strong>Example Chain:</strong> Egyp<strong>t</strong> → <strong>T</strong>imor-Lest<strong>e</strong> → <strong>E</strong>cuado<strong>r</strong> → <strong>R</strong>hode Islan<strong>d</strong> → <strong>D</strong>ominic<strong>a</strong> → <strong>A</strong>lbani<strong>a</strong></p>            <ul>
+                <li><strong>No repeats:</strong> Once a place is used, it cannot be used again in the same game</li>
+                <li><strong>You lose if:</strong> You cannot name a valid place that starts with the required letter</li>
+                <li><strong>Strategy:</strong> Choose places that end with difficult letters to limit your opponent's options!</li>
+            </ul>
         </div>
 
-        <div class="row bg-info text-white text-center p-3 rounded mb-4">
-            <p class="mb-0">
-                Discover the patterns and trends in geographical place names with this exploration of the Last Letter
-                Game. <br>
-                The Last Letter Game challenges players to name places where each new name starts with the last letter
-                of the previous one—for example, "CanadA" leads to "AfghanistaN," which leads to "Nigeria."
-                <br>Select various lists of geographical place names, and analyze how names start and end.
-                <br>This tool offers a deeper look into the letters that define geographical names, helping you uncover
-                insights and strategies for playing the Last Letter Game.
-            </p>
+        <div class="info-box">
+            <h3>🎯 Understanding the Strategy Ratings</h3>
+            <p>This tool analyzes the letter patterns to help you make strategic choices:</p>
+<ul>
+    <li><strong>Strategic Letters (Red):</strong> Few places start with these letters. Ending your word here limits your opponent's options! <em>(Calculated: less than 3% of places start with this letter)</em></li>
+    <li><strong>Defensive Letters (Green):</strong> Many places start with these letters. Ending here gives your opponent lots of choices, but they're safe if you're stuck. <em>(Calculated: more than 8% of places start with this letter)</em></li>
+    <li><strong>Neutral Letters (Yellow):</strong> Balanced - moderate options for continuation <em>(between 3-8% of places start with this letter)</em></li>
+</ul>
+            <p><strong>Pro Tip:</strong> The best strategy is to force your opponent into strategic letters (red) while you end on defensive letters (green) as backup options.</p>
         </div>
-        <div class="text-center my-4">
-            <a href="names.js" download class="btn btn-primary" target="names.js">
-                View Source Data
-            </a>
+
+        <div class="controls">
+            <h3 style="margin-bottom: 15px;">📚 Select Your Game Categories</h3>
+            <div class="category-grid" id="categories"></div>
         </div>
-        <div class="d-flex flex-wrap justify-content-center gap-2 mb-4" id="category-checkboxes">
-            <!-- Checkboxes will be dynamically populated -->
-        </div>
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Words Starting With Letter</h5>
-                        <table class="table table-bordered text-center">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Letter</th>
-                                    <th>Count</th>
-                                    <th>Percent</th>
-                                </tr>
-                            </thead>
-                            <tbody id="start-letter-body"></tbody>
-                        </table>
-                        <canvas id="start-letter-chart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Words Ending With Letter</h5>
-                        <table class="table table-bordered text-center">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Letter</th>
-                                    <th>Count</th>
-                                    <th>Percent</th>
-                                </tr>
-                            </thead>
-                            <tbody id="end-letter-body"></tbody>
-                        </table>
-                        <canvas id="end-letter-chart"></canvas>
-                    </div>
-                </div>
+
+        <div class="grid-2">
+            <div class="card strategic-zone">
+                <h2>🎯 Strategic Letters (Offensive Play)</h2>
+                <p>End your words with these letters to limit opponent options - fewer places start with these!</p>
+                <div class="letter-grid" id="strategic-letters"></div>
             </div>
 
-
-        </div>
-        <div class=" row g-4 mt-4">
-            <div class="col-md-12">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Combined Letter Distribution</h5>
-                        <canvas id="combined-letter-chart"></canvas>
-                    </div>
-                </div>
+            <div class="card defensive-zone">
+                <h2>🛡️ Defensive Letters (Safe Options)</h2>
+                <p>Lots of places start with these - good backup options when you need an easy continuation.</p>
+                <div class="letter-grid" id="defensive-letters"></div>
             </div>
         </div>
-        <!-- Row for the two data tables -->
-        <div class="row g-4 mt-4">
-            <div class="col-md-6">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Words Starting With Letter</h5>
-                        <table id="start-letter-word-table" class="table table-bordered text-center">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Letter</th>
-                                    <th>Count</th>
-                                    <th>Words</th>
-                                </tr>
-                            </thead>
-                            <tbody id="start-letter-word-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card h-100 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Words Ending With Letter</h5>
-                        <table id="end-letter-word-table" class="table table-bordered text-center">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Letter</th>
-                                    <th>Count</th>
-                                    <th>Words</th>
-                                </tr>
-                            </thead>
-                            <tbody id="end-letter-word-body"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
 
-
+        <div class="simulator">
+            <h2>🔗 Chain Simulator</h2>
+            <p style="color: #666; margin-bottom: 15px;">Practice building chains! Click words to add them. Used words are grayed out (no repeats allowed).</p>
+            <input type="text" class="search-box" id="chain-search" placeholder="🔍 Search for a place to play...">
+            <div class="chain-display" id="chain-display">
+                <span style="color: #999;">Start typing or click a word below to begin...</span>
+            </div>
+            <button onclick="resetChain()" style="padding: 10px 20px; background: #ff6b6b; color: white; border: none; border-radius: 8px; cursor: pointer; margin-bottom: 15px;">Clear Chain</button>
+            <div class="word-results" id="search-results"></div>
         </div>
 
+        <div class="card">
+            <h2>🗺️ Letter Transition Matrix</h2>
+            <p>This matrix shows how many places START with the row letter and END with the column letter. 
+            <div class="matrix-container">
+                <table class="matrix-table" id="matrix-table"></table>
+            </div>
+            <div style="margin-top: 15px; text-align: center; font-size: 0.9rem; color: #666;">
+    Example: A/A shows places like "Alaska" (starts with A, ends with A).
+    <span style="color: #51cf66; font-weight: bold;">Green = Many words</span>, 
+    <span style="color: #ffc107; font-weight: bold;">Yellow = Some words</span>, 
+    <span style="color: #ff6b6b; font-weight: bold;">Red = Few/no words</span>
+</div>
+        </div>
 
+        <div class="card">
+            <h2>📊 Letter Analysis</h2>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-box" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);"></div>
+                    <span>Strategic (Few options)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: linear-gradient(135deg, #ffd93d 0%, #ffc107 100%);"></div>
+                    <span>Neutral (Balanced)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background: linear-gradient(135deg, #51cf66 0%, #37b24d 100%);"></div>
+                    <span>Defensive (Many options)</span>
+                </div>
+            </div>
+            <div class="letter-grid" id="all-letters"></div>
+        </div>
+
+        <div class="card">
+            <h2>📈 Game Statistics</h2>
+            <div class="stats-row" id="stats"></div>
+        </div>
+
+        <footer>
+            <p>Made by <a href="https://www.kylescheer.com" target="_blank">Kyle Scheer</a></p>
+            <br><a href='https://ko-fi.com/scheerapps' target='_blank' rel="noopener" title="Support me on Ko-fi">
+            <img height='36' style='border:0px;height:36px;'
+            src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' border='0'
+            alt='Buy Me a Coffee at ko-fi.com' />
+        </a>
+            <p style="margin-top: 10px;">Data source: <a href="https://worldpopulationreview.com/" target="_blank">World Population Review</a> | 
+            <a href="https://github.com/kyletscheer/last-letter" target="_blank">View Code</a></p>
+        </footer>
     </div>
-    <div style="height: 200px"></div>
-    <!-- Footer -->
-    <footer class="bg-white border-top py-4 mt-auto">
-        <div class="container">
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              Made by <a href="https://www.kylescheer.com" target="_blank">Kyle Scheer</a>
-            </div>
-            <div>
-              Data source: <a href="https://worldpopulationreview.com/" target="_blank" class="text-dark" rel="noopener">World Population Review</a>
-              <br>
-              <a href="https://github.com/kyletscheer/last-letter" target="_blank">View Code</a>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-    <script src="names.js"></script>
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-
+<script src="names.js"></script>
+<script src="script.js"></script>
 </body>
-
-</html>
+</html> '
